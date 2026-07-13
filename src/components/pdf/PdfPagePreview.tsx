@@ -81,27 +81,40 @@ export function PdfPagePreview({
   useEffect(() => {
     let cancelled = false;
 
+    // Clear stale state when fileId changes
+    setThumbs(new Map());
+    setLoadError(null);
+    setLoading(true);
+
     fetch("/api/pdf/preview", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ fileId }),
     })
-      .then((res) => res.json())
+      .then(async (res) => {
+        if (!res.ok) throw new Error(`API returned ${res.status}`);
+        const text = await res.text();
+        try {
+          return JSON.parse(text) as PreviewApiResponse;
+        } catch {
+          throw new Error(`Invalid JSON response: ${text.slice(0, 200)}`);
+        }
+      })
       .then((data: PreviewApiResponse) => {
         if (cancelled) return;
         if (!data.success || !data.pages) {
-          setLoadError(data.error ?? "Failed to load preview");
+          setLoadError(data.error ?? "Preview API returned error");
           return;
         }
         const map = new Map<number, string>();
         for (const p of data.pages) map.set(p.pageNum, p.thumbUrl);
         setThumbs(map);
-        if (items.length === 0 && data.pageCount) {
+        if (data.pageCount) {
           onItemsChange(createInitialItems(data.pageCount));
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoadError("Failed to load preview");
+      .catch((err) => {
+        if (!cancelled) setLoadError(`Failed to load preview: ${err instanceof Error ? err.message : String(err)}`);
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -110,7 +123,7 @@ export function PdfPagePreview({
     return () => {
       cancelled = true;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-fetch when fileId changes; items/onItemsChange are for one-time seeding
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileId]);
 
   const toggle = (id: string) => {
