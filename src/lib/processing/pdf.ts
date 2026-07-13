@@ -324,7 +324,7 @@ export async function renderTextWatermarkPng(outputPngPath: string, opts: Waterm
   await runCommand("convert", args);
 }
 
-async function readPngRaw(pngPath: string): Promise<{ width: number; height: number; rgb: Buffer; alpha: Buffer }> {
+export async function readPngRaw(pngPath: string): Promise<{ width: number; height: number; rgb: Buffer; alpha: Buffer }> {
   const { stdout: dims } = await runCommand("identify", ["-format", "%w %h", pngPath]);
   const [width, height] = dims.trim().split(/\s+/).map(Number);
   const [rgb, alpha] = await Promise.all([

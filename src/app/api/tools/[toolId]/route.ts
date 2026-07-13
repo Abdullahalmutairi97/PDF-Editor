@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import path from "path";
+import { randomUUID } from "crypto";
 import { readFile, rm } from "fs/promises";
 import { getToolById } from "@/tools/registry";
 import { createWorkDir, downloadUrlFor, getStoredFile, saveBuffer, type StoredFile } from "@/lib/storage";
@@ -9,6 +10,7 @@ import {
   compressPdf,
   mergePdfs,
   organizePdf,
+  overlayStamp,
   pdfToJpg,
   pdfToImages,
   rotatePdf,
@@ -21,6 +23,7 @@ import {
   type RotationAngle,
   type WatermarkPosition,
 } from "@/lib/processing/pdf";
+import { generateAnnotationOverlay, type Annotation } from "@/lib/processing/edit";
 import {
   compressImage,
   imagesToPdf,
@@ -90,6 +93,45 @@ function parsePageNumbers(input: string): number[] {
     .split(",")
     .map((n) => parseInt(n.trim(), 10))
     .filter((n) => !Number.isNaN(n));
+}
+
+const ANNOTATION_TYPES = new Set(["text", "pen", "highlight", "rectangle", "line", "arrow", "signature"]);
+
+function parseAnnotations(input: unknown): Annotation[] {
+  if (!Array.isArray(input)) return [];
+  const result: Annotation[] = [];
+  for (const raw of input) {
+    if (!raw || typeof raw !== "object") continue;
+    const a = raw as Record<string, unknown>;
+    if (typeof a.type !== "string" || !ANNOTATION_TYPES.has(a.type)) continue;
+    const page = Number(a.page);
+    if (!Number.isFinite(page) || page < 1) continue;
+    const points = Array.isArray(a.points)
+      ? (a.points as unknown[])
+          .map((p) => {
+            const point = p as Record<string, unknown>;
+            return { x: Number(point?.x), y: Number(point?.y) };
+          })
+          .filter((p) => Number.isFinite(p.x) && Number.isFinite(p.y))
+      : undefined;
+    result.push({
+      id: typeof a.id === "string" ? a.id : randomUUID(),
+      type: a.type as Annotation["type"],
+      page,
+      x: Number(a.x) || 0,
+      y: Number(a.y) || 0,
+      width: Number(a.width) || 0,
+      height: Number(a.height) || 0,
+      color: typeof a.color === "string" && a.color ? a.color : "#000000",
+      opacity: Math.min(1, Math.max(0, Number(a.opacity ?? 1))),
+      strokeWidth: a.strokeWidth !== undefined ? Number(a.strokeWidth) : undefined,
+      text: typeof a.text === "string" ? a.text : undefined,
+      fontSize: a.fontSize !== undefined ? Number(a.fontSize) : undefined,
+      points,
+      dataUrl: typeof a.dataUrl === "string" ? a.dataUrl : undefined,
+    });
+  }
+  return result;
 }
 
 const IMAGE_FORMAT_EXTENSION: Record<ImageFormat, string> = {
@@ -235,6 +277,17 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         const outputPath = path.join(workDir, `watermarked-${input.filename}`);
         await watermarkPdf(input.filePath, outputPath, { text, fontSize, color, opacity, rotation, position, pages }, workDir);
         result = await finalizeOutput(outputPath, `watermarked-${input.filename}`);
+        break;
+      }
+      case "edit-pdf": {
+        const input = await resolveInput(fileIds[0]);
+        const annotations = parseAnnotations(options.annotations);
+        if (annotations.length === 0) throw new ProcessingError("No annotations to apply");
+        const overlayPath = path.join(workDir, "overlay.pdf");
+        await generateAnnotationOverlay(annotations, input.filePath, overlayPath, workDir);
+        const outputPath = path.join(workDir, `edited-${input.filename}`);
+        await overlayStamp(input.filePath, overlayPath, outputPath, "all");
+        result = await finalizeOutput(outputPath, `edited-${input.filename}`);
         break;
       }
       case "compress-image": {

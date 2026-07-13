@@ -20,6 +20,7 @@ import { RotatePdf } from "@/components/pdf/RotatePdf";
 import { PdfToJpg } from "@/components/pdf/PdfToJpg";
 import { OrganizePdf } from "@/components/pdf/OrganizePdf";
 import { WatermarkPdf } from "@/components/pdf/WatermarkPdf";
+import { PdfEditor } from "@/components/pdf/PdfEditor";
 import { CompressImage } from "@/components/image/CompressImage";
 import { ImageToPdf } from "@/components/image/ImageToPdf";
 import { ResizeImage } from "@/components/image/ResizeImage";
@@ -37,6 +38,7 @@ const TOOL_COMPONENTS: Record<string, ComponentType<{ tool: ToolDefinition }>> =
   "pdf-to-jpg": PdfToJpg,
   "organize-pdf": OrganizePdf,
   "watermark-pdf": WatermarkPdf,
+  "edit-pdf": PdfEditor,
   "compress-image": CompressImage,
   "image-to-pdf": ImageToPdf,
   "resize-image": ResizeImage,

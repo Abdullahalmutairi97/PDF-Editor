@@ -38,19 +38,7 @@ export function FileUpload({
       const incomingArray = Array.from(incoming);
       const valid = incomingArray.filter((file) => {
         if (!accept || accept.length === 0) return true;
-        if (accept.includes(file.type)) return true;
-        const ext = "." + file.name.split(".").pop()?.toLowerCase();
-        const extMap: Record<string, string> = {
-          ".pdf": "application/pdf",
-          ".jpg": "image/jpeg",
-          ".jpeg": "image/jpeg",
-          ".png": "image/png",
-          ".webp": "image/webp",
-          ".gif": "image/gif",
-          ".bmp": "image/bmp",
-          ".tiff": "image/tiff",
-        };
-        return !!extMap[ext] && accept.includes(extMap[ext]);
+        return accept.includes(file.type);
       });
 
       setError(valid.length < incomingArray.length ? t.errors.invalidFileType : null);

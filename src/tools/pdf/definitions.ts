@@ -205,4 +205,39 @@ export const pdfTools: ToolDefinition[] = [
       },
     ],
   },
+  {
+    id: "edit-pdf",
+    slug: "edit-pdf",
+    slugAr: "تحرير-pdf",
+    category: "pdf",
+    icon: "Edit3",
+    mode: "server",
+    acceptedMimeTypes: ["application/pdf"],
+    multiple: false,
+    name: { ar: "محرر PDF", en: "Edit PDF" },
+    shortDescription: {
+      ar: "أضف نصوصاً ورسوماً وأشكالاً وتوقيعات على صفحات PDF",
+      en: "Add text, drawings, shapes, and signatures to PDF pages",
+    },
+    description: {
+      ar: "محرر PDF المرئي يتيح لك إضافة نصوص وخطوط حرة وأشكال وتظليل وتوقيعات مباشرة فوق صفحات ملفك، مع التحكم الكامل في اللون والشفافية وسمك الخط، ثم حفظ النتيجة كملف PDF جديد.",
+      en: "The visual PDF editor lets you add text, freehand drawings, shapes, highlights, and signatures directly on top of your document's pages, with full control over color, opacity, and stroke width, then save the result as a new PDF file.",
+    },
+    faq: [
+      {
+        question: { ar: "هل يمكنني التراجع عن التعديلات؟", en: "Can I undo my edits?" },
+        answer: {
+          ar: "نعم، يوفر المحرر أزرار تراجع وإعادة لكل إجراء تقوم به.",
+          en: "Yes, the editor provides undo and redo buttons for every action you take.",
+        },
+      },
+      {
+        question: { ar: "هل يمكنني إضافة توقيعي الخاص؟", en: "Can I add my own signature?" },
+        answer: {
+          ar: "نعم، يمكنك رسم توقيعك بالماوس أو باللمس ثم وضعه في أي مكان على الصفحة.",
+          en: "Yes, you can draw your signature with your mouse or touch, then place it anywhere on the page.",
+        },
+      },
+    ],
+  },
 ];

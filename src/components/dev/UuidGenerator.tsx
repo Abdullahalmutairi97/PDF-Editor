@@ -3,14 +3,13 @@
 import { useState } from "react";
 import { Check, Copy } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageProvider";
-import { generateUUID } from "@/lib/uuid";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
 import { Textarea } from "@/components/ui/Textarea";
 
 function uuidV4(): string {
-  return generateUUID();
+  return crypto.randomUUID();
 }
 
 function uuidV7(): string {

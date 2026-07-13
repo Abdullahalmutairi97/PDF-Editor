@@ -248,6 +248,53 @@ export interface TranslationDict {
       rotateSelected: string;
       reset: string;
     };
+    editor: {
+      toolbar: {
+        select: string;
+        text: string;
+        pen: string;
+        highlight: string;
+        rectangle: string;
+        line: string;
+        arrow: string;
+        signature: string;
+        eraser: string;
+      };
+      actions: {
+        undo: string;
+        redo: string;
+        save: string;
+        clear: string;
+        previousPage: string;
+        nextPage: string;
+        pageOf: string;
+        zoom: string;
+        fitToWidth: string;
+      };
+      properties: {
+        title: string;
+        color: string;
+        opacity: string;
+        strokeWidth: string;
+        fontSize: string;
+        delete: string;
+      };
+      signature: {
+        title: string;
+        drawHere: string;
+        clear: string;
+        done: string;
+        cancel: string;
+      };
+      textInput: {
+        placeholder: string;
+        add: string;
+        cancel: string;
+      };
+      emptyState: string;
+      saving: string;
+      noAnnotations: string;
+    };
   };
   imageTools: {
     batch: string;
@@ -534,6 +581,53 @@ export const translations: Record<Locale, TranslationDict> = {
         rotateSelected: "تدوير المحدد",
         reset: "إعادة تعيين",
       },
+      editor: {
+        toolbar: {
+          select: "تحديد ونقل",
+          text: "نص",
+          pen: "قلم حر",
+          highlight: "تظليل",
+          rectangle: "مستطيل",
+          line: "خط",
+          arrow: "سهم",
+          signature: "توقيع",
+          eraser: "ممحاة",
+        },
+        actions: {
+          undo: "تراجع",
+          redo: "إعادة",
+          save: "حفظ وتنزيل",
+          clear: "مسح الكل",
+          previousPage: "الصفحة السابقة",
+          nextPage: "الصفحة التالية",
+          pageOf: "صفحة {current} من {total}",
+          zoom: "التكبير",
+          fitToWidth: "ملاءمة العرض",
+        },
+        properties: {
+          title: "خصائص العنصر",
+          color: "اللون",
+          opacity: "الشفافية",
+          strokeWidth: "سمك الخط",
+          fontSize: "حجم الخط",
+          delete: "حذف",
+        },
+        signature: {
+          title: "ارسم توقيعك",
+          drawHere: "ارسم هنا بالماوس أو باللمس",
+          clear: "مسح",
+          done: "تم",
+          cancel: "إلغاء",
+        },
+        textInput: {
+          placeholder: "اكتب النص هنا...",
+          add: "إضافة",
+          cancel: "إلغاء",
+        },
+        emptyState: "ارفع ملف PDF لبدء التحرير",
+        saving: "جارٍ حفظ التعديلات...",
+        noAnnotations: "لم تقم بإضافة أي تعديلات بعد",
+      },
     },
     imageTools: {
       batch: "معالجة عدة صور دفعة واحدة",
@@ -817,6 +911,53 @@ export const translations: Record<Locale, TranslationDict> = {
         rotateAll: "Rotate all",
         rotateSelected: "Rotate selected",
         reset: "Reset",
+      },
+      editor: {
+        toolbar: {
+          select: "Select & move",
+          text: "Text",
+          pen: "Pen",
+          highlight: "Highlight",
+          rectangle: "Rectangle",
+          line: "Line",
+          arrow: "Arrow",
+          signature: "Signature",
+          eraser: "Eraser",
+        },
+        actions: {
+          undo: "Undo",
+          redo: "Redo",
+          save: "Save & download",
+          clear: "Clear all",
+          previousPage: "Previous page",
+          nextPage: "Next page",
+          pageOf: "Page {current} of {total}",
+          zoom: "Zoom",
+          fitToWidth: "Fit to width",
+        },
+        properties: {
+          title: "Properties",
+          color: "Color",
+          opacity: "Opacity",
+          strokeWidth: "Stroke width",
+          fontSize: "Font size",
+          delete: "Delete",
+        },
+        signature: {
+          title: "Draw your signature",
+          drawHere: "Draw here with your mouse or touch",
+          clear: "Clear",
+          done: "Done",
+          cancel: "Cancel",
+        },
+        textInput: {
+          placeholder: "Type your text here...",
+          add: "Add",
+          cancel: "Cancel",
+        },
+        emptyState: "Upload a PDF to start editing",
+        saving: "Saving your edits...",
+        noAnnotations: "You haven't added any edits yet",
       },
     },
     imageTools: {
