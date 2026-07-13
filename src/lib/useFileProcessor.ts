@@ -14,7 +14,7 @@ interface UseFileProcessorResult {
   reset: () => void;
 }
 
-function uploadFiles(files: File[], onProgress: (percent: number) => void): Promise<string[]> {
+export function uploadFiles(files: File[], onProgress: (percent: number) => void = () => {}): Promise<string[]> {
   return new Promise((resolve, reject) => {
     const formData = new FormData();
     files.forEach((file) => formData.append("files", file));
@@ -88,4 +88,56 @@ export function useFileProcessor(toolId: string): UseFileProcessorResult {
   );
 
   return { stage, uploadProgress, error, resultFiles, run, reset };
+}
+
+export type ProcessOnlyStage = "idle" | "processing" | "done" | "error";
+
+interface UseProcessOnlyResult {
+  stage: ProcessOnlyStage;
+  error: string | null;
+  resultFiles: ProcessResultFile[];
+  run: (fileIds: string[], options?: Record<string, unknown>) => Promise<void>;
+  reset: () => void;
+}
+
+/** Like useFileProcessor, but for flows that already have fileId(s) (e.g. after a preview/upload step) and only need to call /api/tools/[toolId]. */
+export function useProcessOnly(toolId: string): UseProcessOnlyResult {
+  const [stage, setStage] = useState<ProcessOnlyStage>("idle");
+  const [error, setError] = useState<string | null>(null);
+  const [resultFiles, setResultFiles] = useState<ProcessResultFile[]>([]);
+
+  const reset = useCallback(() => {
+    setStage("idle");
+    setError(null);
+    setResultFiles([]);
+  }, []);
+
+  const run = useCallback(
+    async (fileIds: string[], options: Record<string, unknown> = {}) => {
+      setError(null);
+      setStage("processing");
+
+      try {
+        const response = await fetch(`/api/tools/${toolId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fileIds, options }),
+        });
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || "Processing failed");
+        }
+
+        setResultFiles(data.files ?? []);
+        setStage("done");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+        setStage("error");
+      }
+    },
+    [toolId]
+  );
+
+  return { stage, error, resultFiles, run, reset };
 }

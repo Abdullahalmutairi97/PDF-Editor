@@ -110,6 +110,169 @@ export interface TranslationDict {
     pageRanges: string;
     pageRangesPlaceholder: string;
     pagesPerFile: string;
+    colorMode: string;
+    color: string;
+    grayscale: string;
+    imageDpi: string;
+    imageQuality: string;
+    estimatedReduction: string;
+    originalSize: string;
+    newSize: string;
+    estimatedSize: string;
+    outputFormat: string;
+    keepOriginal: string;
+    pageSize: string;
+    letter: string;
+    autoFit: string;
+    orientation: string;
+    portrait: string;
+    landscape: string;
+    auto: string;
+    margin: string;
+    none: string;
+    small: string;
+    large: string;
+    imageFit: string;
+    contain: string;
+    cover: string;
+    stretch: string;
+    presets: string;
+    percentageMode: string;
+    percentage: string;
+    estimatedDimensions: string;
+    original: string;
+  };
+  pdf: {
+    preview: {
+      loading: string;
+      selectAll: string;
+      selectNone: string;
+      selectOdd: string;
+      selectEven: string;
+      selectRange: string;
+      rangePlaceholder: string;
+      apply: string;
+      rotate: string;
+      delete: string;
+      duplicate: string;
+      page: string;
+      selected: string;
+      dragHint: string;
+      blankPage: string;
+    };
+    organize: {
+      addBlankPage: string;
+      reverseOrder: string;
+      extractSelected: string;
+      rotateSelected: string;
+      deleteSelected: string;
+      duplicateSelected: string;
+      addPageNumbers: string;
+      numberFormat: string;
+      numberFormatSimple: string;
+      numberFormatWithTotal: string;
+      numberPosition: string;
+      numberColor: string;
+      numberSize: string;
+      outputFilename: string;
+      applyChanges: string;
+      noPagesLeft: string;
+      pagesRemaining: string;
+    };
+    watermark: {
+      type: string;
+      text: string;
+      image: string;
+      textContent: string;
+      textPlaceholder: string;
+      fontSize: string;
+      opacity: string;
+      color: string;
+      rotation: string;
+      position: string;
+      positions: {
+        center: string;
+        diagonal: string;
+        tile: string;
+        topLeft: string;
+        topCenter: string;
+        topRight: string;
+        bottomLeft: string;
+        bottomCenter: string;
+        bottomRight: string;
+      };
+      uploadLogo: string;
+      applyTo: string;
+      allPages: string;
+      selectedPages: string;
+      scale: string;
+    };
+    split: {
+      extractMode: string;
+      rangesMode: string;
+      everyNMode: string;
+      previewGroups: string;
+      group: string;
+      extractedPages: string;
+    };
+    compress: {
+      extreme: string;
+      estimatedSize: string;
+      originalSize: string;
+      compressedSize: string;
+      reduction: string;
+      colorMode: string;
+      color: string;
+      grayscale: string;
+      imageDpi: string;
+      imageQuality: string;
+    };
+    toJpg: {
+      outputFormat: string;
+      dpi: string;
+      zipOutput: string;
+      singleOutput: string;
+      selectedOnly: string;
+      convertAll: string;
+    };
+    merge: {
+      outputFilename: string;
+      pageSizeNormalize: string;
+      normalizeNone: string;
+      normalizeA4: string;
+      normalizeLetter: string;
+      normalizeFitFirst: string;
+    };
+    rotate: {
+      rotateAll: string;
+      rotateSelected: string;
+      reset: string;
+    };
+  };
+  imageTools: {
+    batch: string;
+    beforeAfter: string;
+    before: string;
+    after: string;
+    maxDimension: string;
+    outputFormat: string;
+    pageSize: string;
+    orientation: string;
+    portrait: string;
+    landscape: string;
+    auto: string;
+    margins: string;
+    marginNone: string;
+    marginSmall: string;
+    marginLarge: string;
+    fit: string;
+    fitContain: string;
+    fitCover: string;
+    fitStretch: string;
+    backgroundColor: string;
+    presets: string;
+    custom: string;
+    estimatedSize: string;
   };
 }
 
@@ -233,6 +396,169 @@ export const translations: Record<Locale, TranslationDict> = {
       pageRanges: "نطاقات الصفحات",
       pageRangesPlaceholder: "مثال: 1-3,5,7-9",
       pagesPerFile: "عدد الصفحات لكل ملف",
+      colorMode: "نمط الألوان",
+      color: "ملون",
+      grayscale: "تدرج رمادي",
+      imageDpi: "دقة الصور (DPI)",
+      imageQuality: "جودة الصور",
+      estimatedReduction: "التخفيض المقدر",
+      originalSize: "الحجم الأصلي",
+      newSize: "الحجم الجديد",
+      estimatedSize: "الحجم المقدر",
+      outputFormat: "صيغة الإخراج",
+      keepOriginal: "الاحتفاظ بالصيغة الأصلية",
+      pageSize: "حجم الصفحة",
+      letter: "Letter",
+      autoFit: "ملائمة تلقائية",
+      orientation: "الاتجاه",
+      portrait: "عمودي",
+      landscape: "أفقي",
+      auto: "تلقائي",
+      margin: "الهامش",
+      none: "بدون",
+      small: "صغير",
+      large: "كبير",
+      imageFit: "ملائمة الصورة",
+      contain: "احتواء",
+      cover: "تغطية",
+      stretch: "تمديد",
+      presets: "إعدادات مسبقة",
+      percentageMode: "وضع النسبة المئوية",
+      percentage: "النسبة المئوية",
+      estimatedDimensions: "الأبعاد المقدرة",
+      original: "الأصلي",
+    },
+    pdf: {
+      preview: {
+        loading: "جارٍ تجهيز معاينة الصفحات...",
+        selectAll: "تحديد الكل",
+        selectNone: "إلغاء التحديد",
+        selectOdd: "الصفحات الفردية",
+        selectEven: "الصفحات الزوجية",
+        selectRange: "تحديد نطاق",
+        rangePlaceholder: "مثال: 1-3,5",
+        apply: "تطبيق",
+        rotate: "تدوير",
+        delete: "حذف",
+        duplicate: "تكرار",
+        page: "صفحة",
+        selected: "محددة",
+        dragHint: "اسحب لإعادة الترتيب",
+        blankPage: "صفحة فارغة",
+      },
+      organize: {
+        addBlankPage: "إضافة صفحة فارغة",
+        reverseOrder: "عكس الترتيب",
+        extractSelected: "استخراج المحدد فقط",
+        rotateSelected: "تدوير المحدد",
+        deleteSelected: "حذف المحدد",
+        duplicateSelected: "تكرار المحدد",
+        addPageNumbers: "إضافة ترقيم الصفحات",
+        numberFormat: "تنسيق الترقيم",
+        numberFormatSimple: "1, 2, 3",
+        numberFormatWithTotal: "1 / 10",
+        numberPosition: "موضع الترقيم",
+        numberColor: "لون الترقيم",
+        numberSize: "حجم الترقيم",
+        outputFilename: "اسم الملف الناتج",
+        applyChanges: "تطبيق التغييرات وتنزيل",
+        noPagesLeft: "لا توجد صفحات متبقية",
+        pagesRemaining: "صفحة متبقية",
+      },
+      watermark: {
+        type: "نوع العلامة المائية",
+        text: "نص",
+        image: "شعار (صورة)",
+        textContent: "نص العلامة المائية",
+        textPlaceholder: "مثال: CONFIDENTIAL",
+        fontSize: "حجم الخط",
+        opacity: "الشفافية",
+        color: "اللون",
+        rotation: "زاوية الدوران",
+        position: "الموضع",
+        positions: {
+          center: "منتصف",
+          diagonal: "قطري",
+          tile: "متكرر على كامل الصفحة",
+          topLeft: "أعلى اليسار",
+          topCenter: "أعلى الوسط",
+          topRight: "أعلى اليمين",
+          bottomLeft: "أسفل اليسار",
+          bottomCenter: "أسفل الوسط",
+          bottomRight: "أسفل اليمين",
+        },
+        uploadLogo: "رفع صورة الشعار",
+        applyTo: "تطبيق على",
+        allPages: "كل الصفحات",
+        selectedPages: "الصفحات المحددة فقط",
+        scale: "الحجم النسبي",
+      },
+      split: {
+        extractMode: "استخراج صفحات محددة",
+        rangesMode: "تقسيم حسب النطاقات",
+        everyNMode: "كل عدد صفحات",
+        previewGroups: "معاينة المجموعات",
+        group: "مجموعة",
+        extractedPages: "الصفحات المستخرجة",
+      },
+      compress: {
+        extreme: "أقصى ضغط",
+        estimatedSize: "الحجم المتوقع",
+        originalSize: "الحجم الأصلي",
+        compressedSize: "الحجم بعد الضغط",
+        reduction: "نسبة التوفير",
+        colorMode: "وضع الألوان",
+        color: "ملون",
+        grayscale: "تدرج رمادي",
+        imageDpi: "دقة الصور (DPI)",
+        imageQuality: "جودة الصور",
+      },
+      toJpg: {
+        outputFormat: "صيغة الإخراج",
+        dpi: "الدقة (DPI)",
+        zipOutput: "ملف مضغوط (ZIP)",
+        singleOutput: "دمج في مستند واحد",
+        selectedOnly: "الصفحات المحددة فقط",
+        convertAll: "كل الصفحات",
+      },
+      merge: {
+        outputFilename: "اسم الملف الناتج",
+        pageSizeNormalize: "توحيد حجم الصفحات",
+        normalizeNone: "بدون تغيير",
+        normalizeA4: "A4",
+        normalizeLetter: "Letter",
+        normalizeFitFirst: "حسب الملف الأول",
+      },
+      rotate: {
+        rotateAll: "تدوير الكل",
+        rotateSelected: "تدوير المحدد",
+        reset: "إعادة تعيين",
+      },
+    },
+    imageTools: {
+      batch: "معالجة عدة صور دفعة واحدة",
+      beforeAfter: "قبل وبعد",
+      before: "قبل",
+      after: "بعد",
+      maxDimension: "الحد الأقصى للأبعاد",
+      outputFormat: "صيغة الإخراج",
+      pageSize: "حجم الصفحة",
+      orientation: "الاتجاه",
+      portrait: "عمودي",
+      landscape: "أفقي",
+      auto: "تلقائي",
+      margins: "الهوامش",
+      marginNone: "بدون",
+      marginSmall: "صغير",
+      marginLarge: "كبير",
+      fit: "طريقة الملاءمة",
+      fitContain: "احتواء",
+      fitCover: "تغطية",
+      fitStretch: "تمديد",
+      backgroundColor: "لون الخلفية",
+      presets: "إعدادات مسبقة",
+      custom: "مخصص",
+      estimatedSize: "الحجم المتوقع",
     },
   },
   en: {
@@ -354,6 +680,169 @@ export const translations: Record<Locale, TranslationDict> = {
       pageRanges: "Page ranges",
       pageRangesPlaceholder: "e.g. 1-3,5,7-9",
       pagesPerFile: "Pages per file",
+      colorMode: "Color mode",
+      color: "Color",
+      grayscale: "Grayscale",
+      imageDpi: "Image DPI",
+      imageQuality: "Image quality",
+      estimatedReduction: "Estimated reduction",
+      originalSize: "Original size",
+      newSize: "New size",
+      estimatedSize: "Estimated size",
+      outputFormat: "Output format",
+      keepOriginal: "Keep original",
+      pageSize: "Page size",
+      letter: "Letter",
+      autoFit: "Auto-fit",
+      orientation: "Orientation",
+      portrait: "Portrait",
+      landscape: "Landscape",
+      auto: "Auto",
+      margin: "Margin",
+      none: "None",
+      small: "Small",
+      large: "Large",
+      imageFit: "Image fit",
+      contain: "Contain",
+      cover: "Cover",
+      stretch: "Stretch",
+      presets: "Presets",
+      percentageMode: "Percentage mode",
+      percentage: "Percentage",
+      estimatedDimensions: "Estimated dimensions",
+      original: "Original",
+    },
+    pdf: {
+      preview: {
+        loading: "Generating page previews...",
+        selectAll: "Select all",
+        selectNone: "Select none",
+        selectOdd: "Odd pages",
+        selectEven: "Even pages",
+        selectRange: "Select range",
+        rangePlaceholder: "e.g. 1-3,5",
+        apply: "Apply",
+        rotate: "Rotate",
+        delete: "Delete",
+        duplicate: "Duplicate",
+        page: "Page",
+        selected: "selected",
+        dragHint: "Drag to reorder",
+        blankPage: "Blank page",
+      },
+      organize: {
+        addBlankPage: "Add blank page",
+        reverseOrder: "Reverse order",
+        extractSelected: "Extract selected only",
+        rotateSelected: "Rotate selected",
+        deleteSelected: "Delete selected",
+        duplicateSelected: "Duplicate selected",
+        addPageNumbers: "Add page numbers",
+        numberFormat: "Number format",
+        numberFormatSimple: "1, 2, 3",
+        numberFormatWithTotal: "1 / 10",
+        numberPosition: "Number position",
+        numberColor: "Number color",
+        numberSize: "Number size",
+        outputFilename: "Output filename",
+        applyChanges: "Apply changes & download",
+        noPagesLeft: "No pages left",
+        pagesRemaining: "pages remaining",
+      },
+      watermark: {
+        type: "Watermark type",
+        text: "Text",
+        image: "Logo (image)",
+        textContent: "Watermark text",
+        textPlaceholder: "e.g. CONFIDENTIAL",
+        fontSize: "Font size",
+        opacity: "Opacity",
+        color: "Color",
+        rotation: "Rotation angle",
+        position: "Position",
+        positions: {
+          center: "Center",
+          diagonal: "Diagonal",
+          tile: "Tiled across page",
+          topLeft: "Top left",
+          topCenter: "Top center",
+          topRight: "Top right",
+          bottomLeft: "Bottom left",
+          bottomCenter: "Bottom center",
+          bottomRight: "Bottom right",
+        },
+        uploadLogo: "Upload logo image",
+        applyTo: "Apply to",
+        allPages: "All pages",
+        selectedPages: "Selected pages only",
+        scale: "Relative size",
+      },
+      split: {
+        extractMode: "Extract specific pages",
+        rangesMode: "Split by ranges",
+        everyNMode: "Every N pages",
+        previewGroups: "Preview groups",
+        group: "Group",
+        extractedPages: "Extracted pages",
+      },
+      compress: {
+        extreme: "Extreme",
+        estimatedSize: "Estimated size",
+        originalSize: "Original size",
+        compressedSize: "Compressed size",
+        reduction: "Reduction",
+        colorMode: "Color mode",
+        color: "Color",
+        grayscale: "Grayscale",
+        imageDpi: "Image DPI",
+        imageQuality: "Image quality",
+      },
+      toJpg: {
+        outputFormat: "Output format",
+        dpi: "DPI",
+        zipOutput: "ZIP archive",
+        singleOutput: "Combine into one document",
+        selectedOnly: "Selected pages only",
+        convertAll: "All pages",
+      },
+      merge: {
+        outputFilename: "Output filename",
+        pageSizeNormalize: "Normalize page size",
+        normalizeNone: "No change",
+        normalizeA4: "A4",
+        normalizeLetter: "Letter",
+        normalizeFitFirst: "Match first file",
+      },
+      rotate: {
+        rotateAll: "Rotate all",
+        rotateSelected: "Rotate selected",
+        reset: "Reset",
+      },
+    },
+    imageTools: {
+      batch: "Batch process multiple images",
+      beforeAfter: "Before & after",
+      before: "Before",
+      after: "After",
+      maxDimension: "Maximum dimension",
+      outputFormat: "Output format",
+      pageSize: "Page size",
+      orientation: "Orientation",
+      portrait: "Portrait",
+      landscape: "Landscape",
+      auto: "Auto",
+      margins: "Margins",
+      marginNone: "None",
+      marginSmall: "Small",
+      marginLarge: "Large",
+      fit: "Fit method",
+      fitContain: "Contain",
+      fitCover: "Cover",
+      fitStretch: "Stretch",
+      backgroundColor: "Background color",
+      presets: "Presets",
+      custom: "Custom",
+      estimatedSize: "Estimated size",
     },
   },
 };

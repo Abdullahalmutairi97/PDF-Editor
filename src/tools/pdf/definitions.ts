@@ -149,4 +149,60 @@ export const pdfTools: ToolDefinition[] = [
       },
     ],
   },
+  {
+    id: "organize-pdf",
+    slug: "organize-pdf",
+    slugAr: "تنظيم-pdf",
+    category: "pdf",
+    icon: "LayoutGrid",
+    mode: "server",
+    acceptedMimeTypes: ["application/pdf"],
+    multiple: false,
+    name: { ar: "تنظيم صفحات PDF", en: "Organize PDF" },
+    shortDescription: {
+      ar: "أعد ترتيب أو دوّر أو احذف أو كرّر صفحات ملف PDF بمعاينة مرئية كاملة",
+      en: "Reorder, rotate, delete, or duplicate PDF pages with a full visual preview",
+    },
+    description: {
+      ar: "أداة تنظيم PDF تمنحك تحكمًا كاملاً في صفحات ملفك: اسحب لإعادة الترتيب، دوّر صفحات محددة، احذف أو كرّر صفحات، وأضف صفحات فارغة، كل ذلك من خلال معاينة مرئية تفاعلية.",
+      en: "Organize PDF gives you full control over your document's pages: drag to reorder, rotate specific pages, delete or duplicate pages, and insert blank pages — all through an interactive visual preview.",
+    },
+    faq: [
+      {
+        question: { ar: "هل يمكنني تكرار صفحة معينة؟", en: "Can I duplicate a specific page?" },
+        answer: {
+          ar: "نعم، حدد الصفحة واضغط زر التكرار لإضافة نسخة منها مباشرة بعدها.",
+          en: "Yes, select the page and press the duplicate button to insert a copy right after it.",
+        },
+      },
+    ],
+  },
+  {
+    id: "watermark-pdf",
+    slug: "watermark-pdf",
+    slugAr: "علامة-مائية-pdf",
+    category: "pdf",
+    icon: "Stamp",
+    mode: "server",
+    acceptedMimeTypes: ["application/pdf"],
+    multiple: false,
+    name: { ar: "إضافة علامة مائية لـ PDF", en: "Watermark PDF" },
+    shortDescription: {
+      ar: "أضف علامة مائية نصية إلى كل صفحات ملف PDF أو صفحات محددة",
+      en: "Add a text watermark to all or selected pages of a PDF",
+    },
+    description: {
+      ar: "أداة العلامة المائية تتيح لك إضافة نص مخصص فوق صفحات ملف PDF مع التحكم في الحجم واللون والشفافية وزاوية الدوران والموضع، مع إمكانية اختيار الصفحات المستهدفة.",
+      en: "Watermark PDF lets you stamp custom text over your document's pages with control over size, color, opacity, rotation, and position, targeting all pages or a specific selection.",
+    },
+    faq: [
+      {
+        question: { ar: "هل يمكن تطبيق العلامة على صفحات محددة فقط؟", en: "Can the watermark be applied to only specific pages?" },
+        answer: {
+          ar: "نعم، يمكنك اختيار الصفحات المطلوبة من المعاينة المرئية قبل المعالجة.",
+          en: "Yes, you can pick the target pages from the visual preview before processing.",
+        },
+      },
+    ],
+  },
 ];

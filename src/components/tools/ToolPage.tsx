@@ -18,6 +18,8 @@ import { SplitPdf } from "@/components/pdf/SplitPdf";
 import { CompressPdf } from "@/components/pdf/CompressPdf";
 import { RotatePdf } from "@/components/pdf/RotatePdf";
 import { PdfToJpg } from "@/components/pdf/PdfToJpg";
+import { OrganizePdf } from "@/components/pdf/OrganizePdf";
+import { WatermarkPdf } from "@/components/pdf/WatermarkPdf";
 import { CompressImage } from "@/components/image/CompressImage";
 import { ImageToPdf } from "@/components/image/ImageToPdf";
 import { ResizeImage } from "@/components/image/ResizeImage";
@@ -33,6 +35,8 @@ const TOOL_COMPONENTS: Record<string, ComponentType<{ tool: ToolDefinition }>> =
   "compress-pdf": CompressPdf,
   "rotate-pdf": RotatePdf,
   "pdf-to-jpg": PdfToJpg,
+  "organize-pdf": OrganizePdf,
+  "watermark-pdf": WatermarkPdf,
   "compress-image": CompressImage,
   "image-to-pdf": ImageToPdf,
   "resize-image": ResizeImage,

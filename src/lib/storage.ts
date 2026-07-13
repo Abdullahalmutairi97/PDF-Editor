@@ -68,6 +68,12 @@ export async function getFileDir(fileId: string): Promise<string> {
   return path.join(STORAGE_ROOT, fileId);
 }
 
+/** Directory used to cache PDF page thumbnails for a stored fileId, nested so cleanup.ts sweeps it for free. */
+export async function getThumbsDir(fileId: string): Promise<string> {
+  const dir = await getFileDir(fileId);
+  return path.join(dir, "thumbs");
+}
+
 export async function getStoredFile(fileId: string): Promise<StoredFile | null> {
   const dir = await getFileDir(fileId);
   try {

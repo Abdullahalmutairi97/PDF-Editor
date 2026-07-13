@@ -8,15 +8,29 @@ import { createZip } from "@/lib/zip";
 import {
   compressPdf,
   mergePdfs,
+  organizePdf,
   pdfToJpg,
+  pdfToImages,
   rotatePdf,
   splitPdfByRanges,
   splitPdfEveryN,
+  watermarkPdf,
   type CompressionQuality,
+  type OrganizePageSpec,
   type PageRange,
   type RotationAngle,
+  type WatermarkPosition,
 } from "@/lib/processing/pdf";
-import { compressImage, imagesToPdf, resizeImage } from "@/lib/processing/image";
+import {
+  compressImage,
+  imagesToPdf,
+  resizeImage,
+  type ImageFit,
+  type ImageFormat,
+  type MarginSize,
+  type Orientation,
+  type PageSize,
+} from "@/lib/processing/image";
 import type { ProcessResultFile } from "@/types/tools";
 
 async function finalizeOutput(filePath: string, filename: string): Promise<ProcessResultFile> {
@@ -78,6 +92,16 @@ function parsePageNumbers(input: string): number[] {
     .filter((n) => !Number.isNaN(n));
 }
 
+const IMAGE_FORMAT_EXTENSION: Record<ImageFormat, string> = {
+  jpeg: ".jpg",
+  png: ".png",
+  webp: ".webp",
+};
+
+function parseImageFormat(value: unknown): ImageFormat | undefined {
+  return value === "jpeg" || value === "png" || value === "webp" ? value : undefined;
+}
+
 export async function POST(request: NextRequest, { params }: { params: Promise<{ toolId: string }> }) {
   const { toolId } = await params;
   const tool = getToolById(toolId);
@@ -137,8 +161,11 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         const quality = (["low", "medium", "high"].includes(requestedQuality)
           ? requestedQuality
           : "medium") as CompressionQuality;
+        const grayscale = options.grayscale === true;
+        const imageDpi = options.dpi ? Number(options.dpi) : undefined;
+        const imageQuality = options.imageQuality ? Number(options.imageQuality) : undefined;
         const outputPath = path.join(workDir, `compressed-${input.filename}`);
-        await compressPdf(input.filePath, outputPath, quality);
+        await compressPdf(input.filePath, outputPath, { quality, grayscale, imageDpi, imageQuality });
         result = await finalizeOutput(outputPath, `compressed-${input.filename}`);
         break;
       }
@@ -154,36 +181,117 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
       }
       case "pdf-to-jpg": {
         const input = await resolveInput(fileIds[0]);
-        const outputs = await pdfToJpg(input.filePath, workDir);
+        const pages = Array.isArray(options.pages) ? parsePageNumbers(options.pages.join(",")) : undefined;
+        const outputs =
+          pages && pages.length > 0
+            ? await pdfToImages(input.filePath, workDir, 150, "jpeg", pages)
+            : await pdfToJpg(input.filePath, workDir);
         result = await finalizeOutputs(outputs, "pages.zip");
         break;
       }
-      case "compress-image": {
+      case "organize-pdf": {
         const input = await resolveInput(fileIds[0]);
+        const pages = Array.isArray(options.pages)
+          ? (options.pages as { pageNum: number; rotation: number }[]).map(
+              (p): OrganizePageSpec => ({
+                pageNum: Number(p.pageNum) || 0,
+                rotation: ([0, 90, 180, 270].includes(Number(p.rotation)) ? Number(p.rotation) : 0) as
+                  | 0
+                  | 90
+                  | 180
+                  | 270,
+              })
+            )
+          : [];
+        if (pages.length === 0) throw new ProcessingError("No pages to organize");
+        const outputPath = path.join(workDir, `organized-${input.filename}`);
+        await organizePdf(input.filePath, pages, outputPath, workDir);
+        result = await finalizeOutput(outputPath, `organized-${input.filename}`);
+        break;
+      }
+      case "watermark-pdf": {
+        const input = await resolveInput(fileIds[0]);
+        const text = String(options.text ?? "").trim();
+        if (!text) throw new ProcessingError("Watermark text is required");
+        const fontSize = Number(options.fontSize) || 36;
+        const color = typeof options.color === "string" && options.color ? options.color : "#ff0000";
+        const opacity = Math.min(1, Math.max(0, Number(options.opacity ?? 50) / 100));
+        const rotation = Number(options.rotation) || 0;
+        const validPositions: WatermarkPosition[] = [
+          "center",
+          "diagonal",
+          "tile",
+          "top-left",
+          "top-center",
+          "top-right",
+          "bottom-left",
+          "bottom-center",
+          "bottom-right",
+        ];
+        const position = (
+          validPositions.includes(options.position as WatermarkPosition) ? options.position : "center"
+        ) as WatermarkPosition;
+        const pages = !options.pages || options.pages === "all" ? "all" : parsePageNumbers(String(options.pages));
+        const outputPath = path.join(workDir, `watermarked-${input.filename}`);
+        await watermarkPdf(input.filePath, outputPath, { text, fontSize, color, opacity, rotation, position, pages }, workDir);
+        result = await finalizeOutput(outputPath, `watermarked-${input.filename}`);
+        break;
+      }
+      case "compress-image": {
+        const inputs = await Promise.all(fileIds.map(resolveInput));
         const quality = Number(options.quality) || 80;
-        const outputPath = path.join(workDir, `compressed-${input.filename}`);
-        await compressImage(input.filePath, outputPath, quality);
-        result = await finalizeOutput(outputPath, `compressed-${input.filename}`);
+        const format = parseImageFormat(options.format);
+        const outputs: string[] = [];
+        for (const input of inputs) {
+          const ext = format ? IMAGE_FORMAT_EXTENSION[format] : path.extname(input.filename);
+          const base = path.parse(input.filename).name;
+          const outputPath = path.join(workDir, `compressed-${base}${ext}`);
+          await compressImage(input.filePath, outputPath, quality, format);
+          outputs.push(outputPath);
+        }
+        result = await finalizeOutputs(outputs, "compressed-images.zip");
         break;
       }
       case "image-to-pdf": {
         const inputs = await Promise.all(fileIds.map(resolveInput));
         const outputPath = path.join(workDir, "images.pdf");
+        const pageSize = (["a4", "letter", "auto"].includes(String(options.pageSize))
+          ? options.pageSize
+          : "auto") as PageSize;
+        const orientation = (["portrait", "landscape", "auto"].includes(String(options.orientation))
+          ? options.orientation
+          : "auto") as Orientation;
+        const margin = (["none", "small", "large"].includes(String(options.margin))
+          ? options.margin
+          : "none") as MarginSize;
+        const fit = (["contain", "cover", "stretch"].includes(String(options.fit))
+          ? options.fit
+          : "contain") as ImageFit;
+        const bgColor = typeof options.bgColor === "string" && options.bgColor ? options.bgColor : "#ffffff";
         await imagesToPdf(
           inputs.map((f) => f.filePath),
-          outputPath
+          outputPath,
+          { pageSize, orientation, margin, fit, bgColor }
         );
         result = await finalizeOutput(outputPath, "images.pdf");
         break;
       }
       case "resize-image": {
-        const input = await resolveInput(fileIds[0]);
+        const inputs = await Promise.all(fileIds.map(resolveInput));
         const width = options.width ? Number(options.width) : undefined;
         const height = options.height ? Number(options.height) : undefined;
         const maintainAspect = options.maintainAspect !== false;
-        const outputPath = path.join(workDir, `resized-${input.filename}`);
-        await resizeImage(input.filePath, outputPath, { width, height, maintainAspect });
-        result = await finalizeOutput(outputPath, `resized-${input.filename}`);
+        const percentage = options.percentage ? Number(options.percentage) : undefined;
+        const format = parseImageFormat(options.format);
+        const outputs: string[] = [];
+        for (const input of inputs) {
+          const ext = format ? IMAGE_FORMAT_EXTENSION[format] : path.extname(input.filename);
+          const base = path.parse(input.filename).name;
+          const outputPath = path.join(workDir, `resized-${base}${ext}`);
+          await resizeImage(input.filePath, outputPath, { width, height, maintainAspect, percentage, format });
+          outputs.push(outputPath);
+        }
+        result = await finalizeOutputs(outputs, "resized-images.zip");
         break;
       }
       default:

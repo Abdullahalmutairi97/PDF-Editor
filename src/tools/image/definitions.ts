@@ -9,7 +9,8 @@ export const imageTools: ToolDefinition[] = [
     icon: "FileArchive",
     mode: "server",
     acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
-    multiple: false,
+    multiple: true,
+    maxFiles: 20,
     name: { ar: "ضغط الصورة", en: "Compress Image" },
     shortDescription: {
       ar: "قلّل حجم الصورة مع التحكم في مستوى الجودة",
@@ -66,7 +67,8 @@ export const imageTools: ToolDefinition[] = [
     icon: "Maximize",
     mode: "server",
     acceptedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
-    multiple: false,
+    multiple: true,
+    maxFiles: 20,
     name: { ar: "تغيير حجم الصورة", en: "Resize Image" },
     shortDescription: {
       ar: "غيّر أبعاد الصورة بالعرض والارتفاع مع خيار قفل النسبة",
