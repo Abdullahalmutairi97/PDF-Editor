@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ghostscript \
     poppler-utils \
     imagemagick \
-    libwebp-dev \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
