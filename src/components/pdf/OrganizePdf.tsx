@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { generateUUID } from "@/lib/uuid";
 import { uploadFiles, useProcessOnly } from "@/lib/useFileProcessor";
 import { FileUpload } from "@/components/tools/FileUpload";
 import { ProcessingStatus } from "@/components/tools/ProcessingStatus";
@@ -70,7 +71,7 @@ export function OrganizePdf({ tool }: { tool: ToolDefinition }) {
       for (const it of prev) {
         next.push(it);
         if (selectedIds.has(it.id)) {
-          next.push({ id: crypto.randomUUID(), pageNum: it.pageNum, rotation: it.rotation });
+          next.push({ id: generateUUID(), pageNum: it.pageNum, rotation: it.rotation });
         }
       }
       return next;

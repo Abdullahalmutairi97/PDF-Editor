@@ -13,6 +13,7 @@ import { SortableContext, arrayMove, rectSortingStrategy, useSortable } from "@d
 import { CSS } from "@dnd-kit/utilities";
 import { Check, RotateCw, Trash2 } from "lucide-react";
 import { useLanguage } from "@/i18n/LanguageProvider";
+import { generateUUID } from "@/lib/uuid";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Spinner } from "@/components/ui/Spinner";
@@ -28,12 +29,12 @@ export interface PdfPreviewItem {
 }
 
 export function createBlankItem(): PdfPreviewItem {
-  return { id: crypto.randomUUID(), pageNum: 0, rotation: 0 };
+  return { id: generateUUID(), pageNum: 0, rotation: 0 };
 }
 
 export function createInitialItems(pageCount: number): PdfPreviewItem[] {
   return Array.from({ length: pageCount }, (_, i) => ({
-    id: crypto.randomUUID(),
+    id: generateUUID(),
     pageNum: i + 1,
     rotation: 0 as PageRotation,
   }));
